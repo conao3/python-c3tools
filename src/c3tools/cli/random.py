@@ -1,10 +1,10 @@
 import typer
 
-from . import uuid as uuid_
+from ..lib import random
 
 app = typer.Typer()
 
 
 @app.command()
 def uuid():
-    print(uuid_.gen())
+    typer.echo(random.uuid4())

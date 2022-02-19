@@ -5,7 +5,7 @@ description = ""
 authors = ["Naoya Yamashita <conao3@gmail.com>"]
 
 [tool.poetry.scripts]
-c3tools = "c3tools.cli:app"
+c3tools = "c3tools.main:app"
 
 [tool.poetry.dependencies]
 python = "^3.10"
