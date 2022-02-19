@@ -1,8 +1,11 @@
 [tool.poetry]
-name = "python-scripts"
+name = "c3tools"
 version = "0.1.0"
 description = ""
 authors = ["Naoya Yamashita <conao3@gmail.com>"]
+
+[tool.poetry.scripts]
+c3tools = "c3tools.cli:app"
 
 [tool.poetry.dependencies]
 python = "^3.10"
