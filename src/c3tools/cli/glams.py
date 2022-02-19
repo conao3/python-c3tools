@@ -30,6 +30,23 @@ def oas():
 
 
 @app.command()
+def oas_parameter():
+    params = []
+    while True:
+        try:
+            input_str = input()
+        except EOFError:
+            break
+        if input_str == "":
+            break
+
+        param = json.loads(input_str)
+        params.append(param)
+
+    typer.echo(json.dumps(lib.openapi.gen_parameter_schema(params), indent=2, ensure_ascii=False,))
+
+
+@app.command()
 def oas_response():
     tgt = json.loads(sys.stdin.read())
     typer.echo(json.dumps(lib.openapi.gen_schema(tgt), indent=2, ensure_ascii=False))
