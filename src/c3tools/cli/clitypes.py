@@ -36,6 +36,7 @@ class OasInputType(lib.pydantic.CamelModel):
     summary: str = pydantic.Field(...)
     tags: list[str] = pydantic.Field(...)
     endpoint: str = pydantic.Field(...)
+    endpoint_main: str = pydantic.Field(...)
     params: list[OasParameterType] = pydantic.Field(...)
     response: dict[str, Any] = pydantic.Field(...)
 
@@ -57,10 +58,15 @@ Invalid type:
 
         raise ValueError(f"Invalid type: expected: list[OasParameterType] or str, got: {type(v)}, raw: {v}")
 
-    @property
-    def endpoint_main(self) -> str:
+    @pydantic.root_validator(pre=True)
+    def root_validator(cls, values) -> dict[str, Any]:
+        if "endpoint_main" in values:
+            return values
+
         endpoint_regexp = re.compile(r'/?(.*)(?:_getData)?')
-        if m := re.match(endpoint_regexp, self.endpoint):
-            return m.groups()[0]
+        if m := re.match(endpoint_regexp, values["Endpoint"]):
+            values["endpoint_main"] = m.groups()[0]
         else:
-            raise Exception(f"Invalid endpoint: {self.endpoint}, expected: {endpoint_regexp.pattern}")
+            raise Exception(f"Invalid endpoint: {values['Endpoint']}, expected: {endpoint_regexp.pattern}")
+
+        return values
