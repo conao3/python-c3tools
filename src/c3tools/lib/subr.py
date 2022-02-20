@@ -5,12 +5,12 @@ def identity(elm: Any) -> Any:
     return elm
 
 
-def keep_if(pred: Callable[[Any], bool], args: list[Any]) -> list[Any]:
-    return [elm for elm in args if pred(elm)]
+def keep_if(pred: Callable[[Any], bool], seq: list[Any]) -> list[Any]:
+    return [elm for elm in seq if pred(elm)]
 
 
-def keep(args: list[Any]):
-    return keep_if(bool, args)
+def keep(seq: list[Any]):
+    return keep_if(bool, seq)
 
 
 def remove_if(pred: Callable[[Any], bool], seq: list[Any]) -> list[Any]:
