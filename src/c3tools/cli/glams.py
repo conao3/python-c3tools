@@ -38,7 +38,16 @@ def oas():
                             },
                         },
                     },
-                    "parameters": [elm.dict() for elm in inpt.params],
+                    "parameters": [
+                        elm.dict()
+                        if isinstance(elm, clitypes.OasParameterType)
+                        else {
+                            "$ref": f"#/components/parameters/{elm.ref}",
+                        }
+                        if isinstance(elm, clitypes.OasRefParameterType)
+                        else (_ for _ in ()).throw(ValueError(f"Invalid type: {elm.__class__.__name__}"))
+                        for elm in inpt.params
+                    ],
                 },
             },
         },

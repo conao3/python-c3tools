@@ -6,6 +6,10 @@ import pydantic
 from .. import lib
 
 
+class OasRefParameterType(lib.pydantic.CamelModel):
+    ref: str
+
+
 class OasParameterType(lib.pydantic.CamelModel):
     name: str
     example: Optional[str]
@@ -39,13 +43,21 @@ class OasInputType(lib.pydantic.CamelModel):
     tags: list[str] = pydantic.Field(...)
     endpoint: str = pydantic.Field(...)
     endpoint_main: str = pydantic.Field(...)
-    params: list[OasParameterType] = pydantic.Field(...)
+    params: list[OasParameterType | OasRefParameterType] = pydantic.Field(...)
     response: dict[str, Any] = pydantic.Field(...)
 
     @pydantic.validator("params", pre=True)
-    def validate_params(cls, v) -> list[OasParameterType]:
+    def validate_params(cls, v) -> list[OasParameterType | OasRefParameterType]:
+        def pred(elm: OasParameterType) -> bool:
+            return elm.required
+
         if isinstance(v, str):
-            return [OasParameterType.parse(elm) for elm in lib.subr.keep(v.split("\n"))]
+            return [
+                OasRefParameterType(ref=elm.name)
+                if elm.name in ("dataRowCount", "dataRowNum", "param98", "param99")
+                else elm
+                for elm in [OasParameterType.parse(elm) for elm in lib.subr.keep(v.split("\n"))]
+            ]
 
         if isinstance(v, list):
             if errval := lib.subr.keep_if(lambda elm: not isinstance(elm, OasParameterType), v):
