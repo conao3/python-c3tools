@@ -8,12 +8,12 @@ app = typer.Typer()
 
 
 @app.command()
-def snake_to_camel():
+def camel():
     input_str = sys.stdin.read()
     typer.echo(lib.string.camel(input_str))
 
 
 @app.command()
-def pascal_case():
+def pascal():
     input_str = sys.stdin.read()
     typer.echo(lib.string.pascal(input_str))
