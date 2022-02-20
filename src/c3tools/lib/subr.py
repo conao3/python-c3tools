@@ -17,6 +17,10 @@ def some_if(pred: Callable[[Any], bool], seq: list[Any]) -> bool:
     return any(pred(elm) for elm in seq)
 
 
+def every_if(pred: Callable[[Any], bool], seq: list[Any]) -> bool:
+    return all(pred(elm) for elm in seq)
+
+
 def remove(elt: Any, seq: list[Any]) -> list[Any]:
     return remove_if(lambda elm: elm == elt, seq)
 
@@ -27,3 +31,7 @@ def keep(seq: list[Any]):
 
 def some(seq: list[Any]):
     return some_if(bool, seq)
+
+
+def every(seq: list[Any]):
+    return every_if(bool, seq)
