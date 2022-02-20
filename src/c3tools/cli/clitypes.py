@@ -48,9 +48,6 @@ class OasInputType(lib.pydantic.CamelModel):
 
     @pydantic.validator("params", pre=True)
     def validate_params(cls, v) -> list[OasParameterType | OasRefParameterType]:
-        def pred(elm: OasParameterType) -> bool:
-            return elm.required
-
         if isinstance(v, str):
             return [
                 OasRefParameterType(ref=elm.name)
