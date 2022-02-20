@@ -72,7 +72,9 @@ Invalid type:
 
             return v
 
-        raise ValueError(f"Invalid type: expected: list[OasParameterType] or str, got: {type(v)}, raw: {v}")
+        raise ValueError(
+            f"Invalid type: expected: list[OasParameterType] or str, got: {type(v)}, raw: {v}"
+        )
 
     @pydantic.root_validator(pre=True)
     def root_validator(cls, values) -> dict[str, Any]:
@@ -83,6 +85,8 @@ Invalid type:
         if m := re.match(endpoint_regexp, values["Endpoint"]):
             values["endpoint_main"] = m.groups()[0]
         else:
-            raise Exception(f"Invalid endpoint: {values['Endpoint']}, expected: {endpoint_regexp.pattern}")
+            raise Exception(
+                f"Invalid endpoint: {values['Endpoint']}, expected: {endpoint_regexp.pattern}"
+            )
 
         return values

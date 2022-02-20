@@ -45,7 +45,9 @@ def oas():
                             "$ref": f"#/components/parameters/{elm.ref}",
                         }
                         if isinstance(elm, clitypes.OasRefParameterType)
-                        else (_ for _ in ()).throw(ValueError(f"Invalid type: {elm.__class__.__name__}"))
+                        else (_ for _ in ()).throw(
+                            ValueError(f"Invalid type: {elm.__class__.__name__}")
+                        )
                         for elm in inpt.params
                     ],
                 },

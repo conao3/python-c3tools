@@ -25,6 +25,14 @@ def yaml_cli(
     dct = jmespath.search(query, json.loads(input))
 
     if indent_list:
-        typer.echo(yaml.dump(dct, Dumper=lib.yaml.ListIndentDumper, sort_keys=False, indent=2, allow_unicode=True))
+        typer.echo(
+            yaml.dump(
+                dct,
+                Dumper=lib.yaml.ListIndentDumper,
+                sort_keys=False,
+                indent=2,
+                allow_unicode=True,
+            )
+        )
     else:
         typer.echo(yaml.dump(dct, sort_keys=False, indent=2))
