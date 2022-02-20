@@ -1,8 +1,11 @@
 import sys
 import re
-from typing import Any
+from typing import Any, Optional
 import typer
 import json
+import yaml
+
+from . import clitypes
 from .. import lib
 
 app = typer.Typer()
@@ -10,39 +13,49 @@ app = typer.Typer()
 
 @app.command()
 def oas():
-    endpoint = input("Endpoint[/get_sound_info_by_gras_getData]: ")
+    inpt = clitypes.OasInputType.parse_obj(yaml.safe_load(sys.stdin.read()))
+    endpoint_pascal = lib.string.pascal(inpt.endpoint_main)
 
-    params = []
-    while True:
-        try:
-            input_str = input('Param[<json>]: ')
-        except EOFError:
-            break
-        if input_str == "":
-            break
+    res = {
+        "paths": {
+            inpt.endpoint: {
+                "get": {
+                    "summary": "",
+                    "tags": [],
+                    "responses": {
+                        "200": {
+                            "description": "OK",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": f"#/components/schemas/{endpoint_pascal}",
+                                    },
+                                    "examples": {
+                                        "example-1": {
+                                            "value": inpt.response,
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    "parameters": [elm.dict() for elm in inpt.params],
+                },
+            },
+        },
+        "components": {
+            "schemas": {
+                endpoint_pascal: lib.openapi.gen_schema(inpt.response),
+            },
+        },
+    }
 
-        param = json.loads(input_str)
-        params.append(param)
-
-    response = input("Response: ")
-
-    typer.echo(f"{endpoint=}, {params=}, {response=}")
+    typer.echo(json.dumps(res, indent=2))
 
 
 @app.command()
 def oas_parameter():
-    params = []
-    while True:
-        try:
-            input_str = input()
-        except EOFError:
-            break
-        if input_str == "":
-            break
-
-        param = json.loads(input_str)
-        params.append(param)
-
+    params = [json.loads(elm) for elm in lib.stdin.readlines() if elm]
     typer.echo(json.dumps(lib.openapi.gen_parameter_schema(params), indent=2, ensure_ascii=False,))
 
 
@@ -54,34 +67,5 @@ def oas_response():
 
 @app.command()
 def oas_parse_parameter():
-    params = []
-    regexp = re.compile(r"([^ ]*): (?:(.*) )?// (.*)")
-    while True:
-        try:
-            input_str = input()
-        except EOFError:
-            break
-        if input_str == "":
-            break
-
-        if m := re.match(regexp, input_str):
-            name, example, description = m.groups()
-            if m := re.match(r"(.*) +[^ ]+必須", description):
-                description = m.groups()[0]
-                required = True
-            else:
-                required = False
-
-            params.append({
-                "name": name,
-                "example": example,
-                "description": description,
-                "required": bool(required)
-            })
-
-        else:
-            typer.echo(f"parse error: {input_str}")
-            typer.echo(f"  expected: {regexp.pattern}")
-
-    for param in params:
+    for param in [clitypes.OasParameterType.parse(elm) for elm in lib.stdin.readlines()]:
         typer.echo(json.dumps(param, ensure_ascii=False))
