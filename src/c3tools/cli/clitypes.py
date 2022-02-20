@@ -34,6 +34,7 @@ class OasParameterType(lib.pydantic.CamelModel):
 
 class OasInputType(lib.pydantic.CamelModel):
     summary: str = pydantic.Field(...)
+    tags: list[str] = pydantic.Field(...)
     endpoint: str = pydantic.Field(...)
     params: list[OasParameterType] = pydantic.Field(...)
     response: dict[str, Any] = pydantic.Field(...)

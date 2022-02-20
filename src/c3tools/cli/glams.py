@@ -21,7 +21,7 @@ def oas():
             inpt.endpoint: {
                 "get": {
                     "summary": "",
-                    "tags": [],
+                    "tags": inpt.tags,
                     "responses": {
                         "200": {
                             "description": "OK",
