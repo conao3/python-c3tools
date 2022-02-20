@@ -7,7 +7,7 @@ def gen_schema(tgt: Any) -> dict[str, Any]:
         try:
             # try parse tgt as int
             is_int = isinstance(int(tgt), int)
-        except:  # noqa
+        except ValueError:
             pass
 
     if isinstance(tgt, dict):
