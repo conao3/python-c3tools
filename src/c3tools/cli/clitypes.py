@@ -44,7 +44,7 @@ class OasInputType(lib.pydantic.CamelModel):
             return [OasParameterType.parse(elm) for elm in v.split('\n')]
 
         if isinstance(v, list):
-            if errval := lib.subr.keep_if(v, lambda elm: not isinstance(elm, OasParameterType)):
+            if errval := lib.subr.keep_if(lambda elm: not isinstance(elm, OasParameterType), v):
                 raise ValueError(f"""\
 Invalid type:
     expected: list[OasParameterType]

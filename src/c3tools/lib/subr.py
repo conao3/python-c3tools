@@ -5,9 +5,9 @@ def identity(elm: Any) -> Any:
     return elm
 
 
-def keep_if(args: list[Any], pred: Callable[[Any], bool]) -> list[Any]:
+def keep_if(pred: Callable[[Any], bool], args: list[Any]) -> list[Any]:
     return [elm for elm in args if pred(elm)]
 
 
 def keep(args: list[Any]):
-    return keep_if(args, bool)
+    return keep_if(bool, args)
