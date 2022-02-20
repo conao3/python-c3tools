@@ -13,9 +13,17 @@ def keep_if(pred: Callable[[Any], bool], seq: list[Any]) -> list[Any]:
     return remove_if(lambda elm: not pred(elm), seq)
 
 
+def some_if(pred: Callable[[Any], bool], seq: list[Any]) -> bool:
+    return any(pred(elm) for elm in seq)
+
+
 def remove(elt: Any, seq: list[Any]) -> list[Any]:
     return remove_if(lambda elm: elm == elt, seq)
 
 
 def keep(seq: list[Any]):
     return keep_if(bool, seq)
+
+
+def some(seq: list[Any]):
+    return some_if(bool, seq)
