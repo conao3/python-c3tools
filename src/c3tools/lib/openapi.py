@@ -1,58 +1,58 @@
 from typing import Any
 
 
-def gen_schema(tgt: Any) -> dict[str, Any]:
+def gen_schema(arg: Any) -> dict[str, Any]:
     is_int = False
-    if isinstance(tgt, str):
+    if isinstance(arg, str):
         try:
-            # try parse tgt as int
-            is_int = isinstance(int(tgt), int)
+            # try parse arg as int
+            is_int = isinstance(int(arg), int)
         except ValueError:
             pass
 
-    if isinstance(tgt, dict):
+    if isinstance(arg, dict):
         return {
             "type": "object",
-            "required": [k for k in tgt.keys()],
-            "properties": {k: gen_schema(v) for k, v in tgt.items()},
+            "required": [k for k in arg.keys()],
+            "properties": {k: gen_schema(v) for k, v in arg.items()},
         }
-    elif isinstance(tgt, list):
+    elif isinstance(arg, list):
         return {
             "type": "array",
-            "items": gen_schema(tgt[0]) if len(tgt) else {"type": "object"},
+            "items": gen_schema(arg[0]) if len(arg) else {"type": "object"},
         }
-    elif is_int or isinstance(tgt, (int, float)):
+    elif is_int or isinstance(arg, (int, float)):
         return {"type": "number"}
-    elif isinstance(tgt, str):
+    elif isinstance(arg, str):
         return {"type": "string"}
-    elif isinstance(tgt, bool):
+    elif isinstance(arg, bool):
         return {"type": "boolean"}
-    elif isinstance(tgt, type(None)):
+    elif isinstance(arg, type(None)):
         return {"type": "string"}
     else:
-        raise Exception(f"Unknown type: {tgt}")
+        raise Exception(f"Unknown type: {arg}")
 
 
-def gen_parameter_schema(tgt: list[dict[str, Any]]) -> dict[str, Any]:
-    def gen_parameter_schema_1(tgt: dict[str, Any]) -> dict[str, Any]:
+def gen_parameter_schema(arg: list[dict[str, Any]]) -> dict[str, Any]:
+    def gen_parameter_schema_1(arg: dict[str, Any]) -> dict[str, Any]:
         return dict(
-            {"schema": gen_schema(tgt["example"]), "in": "query", "name": tgt["name"]},
+            {"schema": gen_schema(arg["example"]), "in": "query", "name": arg["name"]},
             **(
                 {
-                    "description": tgt.get("description", ""),
+                    "description": arg.get("description", ""),
                 }
-                if tgt.get("description")
+                if arg.get("description")
                 else {}
             ),
             **(
                 {
-                    "required": tgt["required"],
+                    "required": arg["required"],
                 }
-                if tgt.get("required")
+                if arg.get("required")
                 else {}
             ),
         )
 
     return {
-        "parameters": [gen_parameter_schema_1(elm) for elm in tgt],
+        "parameters": [gen_parameter_schema_1(elm) for elm in arg],
     }

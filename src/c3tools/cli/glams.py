@@ -75,8 +75,8 @@ def oas_parameter():
 
 @app.command()
 def oas_response():
-    tgt = json.loads(sys.stdin.read())
-    typer.echo(json.dumps(lib.openapi.gen_schema(tgt), indent=2, ensure_ascii=False))
+    arg = json.loads(sys.stdin.read())
+    typer.echo(json.dumps(lib.openapi.gen_schema(arg), indent=2, ensure_ascii=False))
 
 
 @app.command()
