@@ -39,7 +39,7 @@ class OasInputType(lib.pydantic.CamelModel):
     params: list[OasParameterType] = pydantic.Field(...)
     response: dict[str, Any] = pydantic.Field(...)
 
-    @pydantic.validator("params")
+    @pydantic.validator("params", pre=True)
     def validate_params(cls, v) -> list[OasParameterType]:
         if isinstance(v, str):
             return [OasParameterType.parse(elm) for elm in lib.subr.keep(v.split('\n'))]
