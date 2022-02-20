@@ -1,6 +1,8 @@
 import re
 from typing import Any, Optional
+
 import pydantic
+
 from .. import lib
 
 
@@ -43,16 +45,18 @@ class OasInputType(lib.pydantic.CamelModel):
     @pydantic.validator("params", pre=True)
     def validate_params(cls, v) -> list[OasParameterType]:
         if isinstance(v, str):
-            return [OasParameterType.parse(elm) for elm in lib.subr.keep(v.split('\n'))]
+            return [OasParameterType.parse(elm) for elm in lib.subr.keep(v.split("\n"))]
 
         if isinstance(v, list):
             if errval := lib.subr.keep_if(lambda elm: not isinstance(elm, OasParameterType), v):
-                raise ValueError(f"""\
+                raise ValueError(
+                    f"""\
 Invalid type:
     expected: list[OasParameterType]
     got: {[str(type(elm)) for elm in errval]}
     got[raw]: {list(errval)} {len(errval)}
-""")
+"""
+                )
 
             return v
 
@@ -63,7 +67,7 @@ Invalid type:
         if "endpoint_main" in values:
             return values
 
-        endpoint_regexp = re.compile(r'/?(.*)(?:_getData)?')
+        endpoint_regexp = re.compile(r"/?(.*)(?:_getData)?")
         if m := re.match(endpoint_regexp, values["Endpoint"]):
             values["endpoint_main"] = m.groups()[0]
         else:

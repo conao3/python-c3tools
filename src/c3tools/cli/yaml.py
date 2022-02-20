@@ -1,5 +1,6 @@
 import json
 import sys
+
 import jmespath
 import typer
 import yaml

@@ -1,5 +1,5 @@
 import sys
-import re
+
 import typer
 
 from .. import lib

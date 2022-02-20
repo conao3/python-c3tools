@@ -1,4 +1,4 @@
-from typing import Any, Union
+from typing import Any
 
 
 def gen_schema(tgt: Any) -> dict[str, Any]:
@@ -35,17 +35,22 @@ def gen_schema(tgt: Any) -> dict[str, Any]:
 
 def gen_parameter_schema(tgt: list[dict[str, Any]]) -> dict[str, Any]:
     def gen_parameter_schema_1(tgt: dict[str, Any]) -> dict[str, Any]:
-        return dict({
-                "schema": gen_schema(tgt["example"]),
-                "in": "query",
-                "name": tgt["name"]
-            },
-            **({
-                "description": tgt.get("description", ""),
-            } if tgt.get("description") else {}),
-            **({
-                "required": tgt["required"],
-            } if tgt.get("required") else {})
+        return dict(
+            {"schema": gen_schema(tgt["example"]), "in": "query", "name": tgt["name"]},
+            **(
+                {
+                    "description": tgt.get("description", ""),
+                }
+                if tgt.get("description")
+                else {}
+            ),
+            **(
+                {
+                    "required": tgt["required"],
+                }
+                if tgt.get("required")
+                else {}
+            ),
         )
 
     return {

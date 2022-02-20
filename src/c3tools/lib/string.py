@@ -6,4 +6,4 @@ def camel(arg: str) -> str:
 
 
 def pascal(arg: str) -> str:
-    return "".join(x.capitalize() for x in re.split(r'[-_ ]', arg))
+    return "".join(x.capitalize() for x in re.split(r"[-_ ]", arg))

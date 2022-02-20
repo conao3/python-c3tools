@@ -1,8 +1,10 @@
-import sys
 import json
-import yaml
+import sys
+
 import jmespath
 import typer
+import yaml
+
 from .. import lib
 
 app = typer.Typer()

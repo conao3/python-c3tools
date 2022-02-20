@@ -1,12 +1,11 @@
-import sys
-import re
-from typing import Any, Optional
-import typer
 import json
+import sys
+
+import typer
 import yaml
 
-from . import clitypes
 from .. import lib
+from . import clitypes
 
 app = typer.Typer()
 
@@ -56,7 +55,13 @@ def oas():
 @app.command()
 def oas_parameter():
     params = [json.loads(elm) for elm in lib.stdin.readlines() if elm]
-    typer.echo(json.dumps(lib.openapi.gen_parameter_schema(params), indent=2, ensure_ascii=False,))
+    typer.echo(
+        json.dumps(
+            lib.openapi.gen_parameter_schema(params),
+            indent=2,
+            ensure_ascii=False,
+        )
+    )
 
 
 @app.command()
