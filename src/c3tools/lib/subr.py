@@ -10,7 +10,7 @@ def remove_if(pred: Callable[[Any], bool], seq: list[Any]) -> list[Any]:
 
 
 def keep_if(pred: Callable[[Any], bool], seq: list[Any]) -> list[Any]:
-    return [elm for elm in seq if pred(elm)]
+    return remove_if(lambda elm: not pred(elm), seq)
 
 
 def remove(elt: Any, seq: list[Any]) -> list[Any]:
