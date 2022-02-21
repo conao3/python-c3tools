@@ -1,3 +1,4 @@
+import string
 import typer
 
 from ..lib import random
@@ -16,4 +17,4 @@ def chars(
     prefix: str = typer.Option(""),
     suffix: str = typer.Option(""),
 ):
-    typer.echo(prefix + random.chars(length) + suffix)
+    typer.echo(prefix + random.chars(length, population=string.digits + "abcdef") + suffix)
