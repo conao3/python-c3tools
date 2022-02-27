@@ -11,7 +11,7 @@ app = typer.Typer()
 @app.command(name="json")
 def json_cli(query: str = typer.Option("@", help="JMESPath query")):
     input = sys.stdin.read()
-    typer.echo(json.dumps(jmespath.search(query, yaml.safe_load(input)), indent=2))
+    typer.echo(json.dumps(jmespath.search(query, yaml.safe_load(input)), indent=2, ensure_ascii=False))
 
 
 @app.command(name="yaml")
