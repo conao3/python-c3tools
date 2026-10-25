@@ -12,7 +12,7 @@ app = typer.Typer()
 
 @app.command()
 def oas():
-    inpt = clitypes.OasInputType.parse_obj(yaml.safe_load(sys.stdin.read()))
+    inpt = clitypes.OasInputType.model_validate(yaml.safe_load(sys.stdin.read()))
     endpoint_pascal = lib.string.pascal(inpt.endpoint_main)
 
     res = {
@@ -39,14 +39,18 @@ def oas():
                         },
                     },
                     "parameters": [
-                        elm.dict()
-                        if isinstance(elm, clitypes.OasParameterType)
-                        else {
-                            "$ref": f"#/components/parameters/{elm.ref}",
-                        }
-                        if isinstance(elm, clitypes.OasRefParameterType)
-                        else (_ for _ in ()).throw(
-                            ValueError(f"Invalid type: {elm.__class__.__name__}")
+                        (
+                            elm.model_dump()
+                            if isinstance(elm, clitypes.OasParameterType)
+                            else (
+                                {
+                                    "$ref": f"#/components/parameters/{elm.ref}",
+                                }
+                                if isinstance(elm, clitypes.OasRefParameterType)
+                                else (_ for _ in ()).throw(
+                                    ValueError(f"Invalid type: {elm.__class__.__name__}")
+                                )
+                            )
                         )
                         for elm in inpt.params
                     ],

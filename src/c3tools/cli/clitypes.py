@@ -46,26 +46,27 @@ class OasInputType(lib.pydantic.CamelModel):
     params: list[OasParameterType | OasRefParameterType] = pydantic.Field(...)
     response: dict[str, Any] = pydantic.Field(...)
 
-    @pydantic.validator("params", pre=True)
+    @pydantic.field_validator("params", mode="before")
+    @classmethod
     def validate_params(cls, v) -> list[OasParameterType | OasRefParameterType]:
         if isinstance(v, str):
             return [
-                OasRefParameterType(ref=elm.name)
-                if elm.name in ("dataRowCount", "dataRowNum", "param98", "param99")
-                else elm
+                (
+                    OasRefParameterType(ref=elm.name)
+                    if elm.name in ("dataRowCount", "dataRowNum", "param98", "param99")
+                    else elm
+                )
                 for elm in [OasParameterType.parse(elm) for elm in lib.subr.keep(v.split("\n"))]
             ]
 
         if isinstance(v, list):
             if errval := lib.subr.keep_if(lambda elm: not isinstance(elm, OasParameterType), v):
-                raise ValueError(
-                    f"""\
+                raise ValueError(f"""\
 Invalid type:
     expected: list[OasParameterType]
     got: {[str(type(elm)) for elm in errval]}
     got[raw]: {list(errval)} {len(errval)}
-"""
-                )
+""")
 
             return v
 
@@ -73,7 +74,8 @@ Invalid type:
             f"Invalid type: expected: list[OasParameterType] or str, got: {type(v)}, raw: {v}"
         )
 
-    @pydantic.root_validator(pre=True)
+    @pydantic.model_validator(mode="before")
+    @classmethod
     def root_validator(cls, values) -> dict[str, Any]:
         if "endpoint_main" in values:
             return values
