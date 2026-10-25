@@ -4,7 +4,8 @@ from . import string
 
 
 class CamelModel(pydantic.BaseModel):
-    class Config:
-        alias_generator = string.camel
-        allow_population_by_field_name = True
-        use_enum_values = True
+    model_config = pydantic.ConfigDict(
+        alias_generator=string.camel,
+        validate_by_name=True,
+        use_enum_values=True,
+    )

@@ -1,6 +1,6 @@
-import uuid
-import string
 import random
+import string
+import uuid
 
 
 def uuid4() -> str:

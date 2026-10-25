@@ -1,4 +1,5 @@
 import string
+
 import typer
 
 from ..lib import random
