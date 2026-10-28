@@ -93,7 +93,7 @@ echo 'id:path:string' | c3tools glams oas-parse-parameter
 
 ## Requirements
 
-- Python 3.10+
+- Python 3.11+
 - Dependencies: typer, jmespath, pyyaml, jinja2, pydantic
 
 ## Development
