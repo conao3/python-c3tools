@@ -9,7 +9,7 @@ c3tools = "c3tools.main:app"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-typer = "^0.27.3"
+typer = "^0.28.0"
 Jinja2 = "^3.1.6"
 jmespath = "^1.1.0"
 PyYAML = "^6.0.3"
