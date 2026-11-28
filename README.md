@@ -1,4 +1,12 @@
-# c3tools
+<p align="center"><img src="docs/assets/banner.png" alt="c3tools: Command-line tools for everyday development tasks, built with Python" width="880"></p>
+
+<p align="center"><strong>Command-line tools for everyday development tasks, built with Python</strong></p>
+
+<p align="center"><a href="LICENSE"><img src="https://img.shields.io/github/license/conao3/python-c3tools" alt="License"></a> <a href="https://github.com/conao3/python-c3tools/stargazers"><img src="https://img.shields.io/github/stars/conao3/python-c3tools?style=flat" alt="GitHub stars"></a></p>
+
+<p align="center"><a href="#installation">Installation</a> | <a href="#usage">Usage</a> | <a href="#development">Development</a> | <a href="#license">License</a></p>
+
+<h1>c3tools</h1>
 
 A collection of command-line utilities for everyday development tasks. Built with Python and Typer for a clean, intuitive interface.
 
